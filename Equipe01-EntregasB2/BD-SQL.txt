@@ -1,0 +1,64 @@
+CREATE TABLE IF NOT EXISTS Adress (
+    Id UUID PRIMARY KEY,
+    UF TEXT,
+    City TEXT,
+    Street TEXT,
+    Number TEXT,
+    Postalcode TEXT
+);
+
+CREATE TABLE IF NOT EXISTS Image (
+    Id UUID PRIMARY KEY,
+    Content TEXT,
+    MimeType TEXT,
+    FileName TEXT
+);
+
+CREATE TABLE IF NOT EXISTS Payment_Method (
+    Id UUID PRIMARY KEY,
+    Description TEXT,
+    Installments INT,
+    Fees DECIMAL
+);
+
+CREATE TABLE IF NOT EXISTS Payment (
+    Id_Payment UUID PRIMARY KEY,
+    Value DECIMAL(10,2),
+    DateTime TIMESTAMP,
+    Status BOOLEAN,
+    Payment_Method UUID REFERENCES Payment_Method(Id)
+);
+
+CREATE TABLE IF NOT EXISTS Acess_Pass (
+    Id UUID PRIMARY KEY,
+    Acess TEXT,
+    Salt TEXT
+);
+
+CREATE TABLE IF NOT EXISTS Session (
+    Id UUID PRIMARY KEY,
+    DateTime TIMESTAMP,
+    Start TIMESTAMP,
+    Ends TIMESTAMP,
+    Local UUID REFERENCES Adress(Id),
+    Masseuse UUID REFERENCES User(Id),
+    Payment UUID REFERENCES Payment(Id)
+);
+
+CREATE TABLE IF NOT EXISTS User (
+    Id UUID PRIMARY KEY,
+    Name VARCHAR(100),
+    Phone_Number VARCHAR(100),
+    Email_Address VARCHAR(100),
+    Hash TEXT,
+    Salt TEXT,
+    CRF TEXT,
+    Id_Acess UUID REFERENCES Acess_Pass(Id),
+    Address UUID REFERENCES Adress(Id),
+    CREFITO UUID REFERENCES CREFITO(Id),
+    Photo UUID REFERENCES Image(Id)
+);
+
+CREATE TABLE IF NOT EXISTS CREFITO (
+    Id UUID PRIMARY KEY
+);
